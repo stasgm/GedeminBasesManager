@@ -16,7 +16,14 @@ namespace GedeminBasesManager
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+
+            String[] arguments = Environment.GetCommandLineArgs();
+
+            if (arguments.Length == 1) {
+                Application.Run(new frmSettings());
+            }else{
+                Application.Run(new frmBackup(arguments));
+            }
         }
     }
 }
