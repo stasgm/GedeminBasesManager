@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmBackup));
             this.label3 = new System.Windows.Forms.Label();
             this.passwordBox = new System.Windows.Forms.TextBox();
             this.usernameBox = new System.Windows.Forms.TextBox();
@@ -45,6 +46,7 @@
             this.tbDBName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tbLogOut = new System.Windows.Forms.TextBox();
+            this.cbLog = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label3
@@ -122,9 +124,9 @@
             this.label5.Font = new System.Drawing.Font("Trebuchet MS", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.Location = new System.Drawing.Point(12, 100);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(166, 22);
+            this.label5.Size = new System.Drawing.Size(127, 22);
             this.label5.TabIndex = 37;
-            this.label5.Text = "Restore backup test:";
+            this.label5.Text = "Restore backup";
             // 
             // restoreDestBox
             // 
@@ -195,17 +197,32 @@
             // 
             // tbLogOut
             // 
-            this.tbLogOut.Location = new System.Drawing.Point(398, 9);
+            this.tbLogOut.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tbLogOut.Location = new System.Drawing.Point(398, 29);
             this.tbLogOut.Multiline = true;
             this.tbLogOut.Name = "tbLogOut";
-            this.tbLogOut.Size = new System.Drawing.Size(412, 258);
+            this.tbLogOut.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.tbLogOut.Size = new System.Drawing.Size(412, 238);
             this.tbLogOut.TabIndex = 42;
+            // 
+            // cbLog
+            // 
+            this.cbLog.AutoSize = true;
+            this.cbLog.Checked = true;
+            this.cbLog.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbLog.Location = new System.Drawing.Point(398, 6);
+            this.cbLog.Name = "cbLog";
+            this.cbLog.Size = new System.Drawing.Size(110, 17);
+            this.cbLog.TabIndex = 43;
+            this.cbLog.Text = "Show process log";
+            this.cbLog.UseVisualStyleBackColor = true;
             // 
             // frmBackup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(822, 281);
+            this.Controls.Add(this.cbLog);
             this.Controls.Add(this.tbLogOut);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.tbDBName);
@@ -223,10 +240,11 @@
             this.Controls.Add(this.label11);
             this.Controls.Add(this.label12);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "frmBackup";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Restore database";
+            this.Text = "Restore backup";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -251,5 +269,6 @@
         private System.Windows.Forms.TextBox tbDBName;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox tbLogOut;
+        private System.Windows.Forms.CheckBox cbLog;
     }
 }

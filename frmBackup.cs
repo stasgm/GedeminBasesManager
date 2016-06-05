@@ -3,7 +3,6 @@ using System.Windows.Forms;
 using FirebirdBackupKit;
 using System.IO;
 using System.Diagnostics;
-using TestMessageThread;
 using System.Threading;
 
 namespace GedeminBasesManager
@@ -12,7 +11,6 @@ namespace GedeminBasesManager
     {
         string fbkFilter = "BK files|*.bk";
         TextBoxTraceListener _textBoxListener;
-        SpewPointlessMessages _messageGenerator;
         Thread _messageGeneratingThread;
 
         public frmBackup()
@@ -32,9 +30,9 @@ namespace GedeminBasesManager
 
             restoreSrcBox.Text = backuppath;
 
-            tbDBName.Text = Path.GetFileNameWithoutExtension(backuppath) + ".fdb";
+            tbDBName.Text = Path.GetFileNameWithoutExtension(backuppath);
 
-            restoreDestBox.Text = Path.GetDirectoryName(backuppath) + "\\" + tbDBName.Text;
+            restoreDestBox.Text = Path.GetDirectoryName(backuppath) + "\\" + tbDBName.Text + ".fdb";
         }
 
         private void restoreSrcBtn_Click(object sender, EventArgs e)
@@ -61,25 +59,37 @@ namespace GedeminBasesManager
 
         private void restoreBtn_Click(object sender, EventArgs e)
         {
-            _textBoxListener = new TextBoxTraceListener(tbLogOut);
-            _messageGenerator = new SpewPointlessMessages();
-            Debug.Listeners.Add(_textBoxListener);
-            //            Debug.AutoFlush = true;
-            //            Debug.Indent();
-            //            Debug.WriteLine("Entering Main");
-            //            Debug.WriteLine("Exiting Main");
-            //            Debug.Unindent();
-            //  Application.DoEvents();
-            
-            _messageGenerator.source = restoreSrcBox.Text;
-            _messageGenerator.dest = restoreDestBox.Text;
-            _messageGeneratingThread = new Thread(new ThreadStart(_messageGenerator.Start));
+            if (cbLog.Checked)
+            { 
+                _textBoxListener = new TextBoxTraceListener(tbLogOut);
+                Debug.Listeners.Add(_textBoxListener);
+            }
+
+            _messageGeneratingThread = new Thread(new ThreadStart(RunRestore));
             _messageGeneratingThread.Start();
+
         }
 
         private void tbDBName_TextChanged(object sender, EventArgs e)
         {
-            restoreDestBox.Text = Path.GetDirectoryName(restoreDestBox.Text) + "\\" + tbDBName.Text;
+            restoreDestBox.Text = Path.GetDirectoryName(restoreDestBox.Text) + "\\" + tbDBName.Text + ".fdb";
+        }
+
+        private void RunRestore()
+        {
+            try
+            {
+                var backupKit = new BackupKit(usernameBox.Text, passwordBox.Text);
+                backupKit.Restore(restoreSrcBox.Text, restoreDestBox.Text);
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            catch (IOException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 
@@ -104,13 +114,10 @@ namespace GedeminBasesManager
             _target.Invoke(_invokeWrite, new object[]
                 { message + Environment.NewLine });
         }
-
+        
         private delegate void StringSendDelegate(string message);
         private void SendString(string message)
         {
-            // No need to lock text box as this function will only 
-            // ever be executed from the UI thread
-            //.._target.Text += message;
             _target.AppendText(message + "\r");
         }
     }   
