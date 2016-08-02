@@ -219,6 +219,7 @@
             // 
             // frmBackup
             // 
+            this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(822, 281);
@@ -245,6 +246,8 @@
             this.Name = "frmBackup";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Restore backup";
+            this.DragDrop += new System.Windows.Forms.DragEventHandler(this.frmBackup_DragDrop);
+            this.DragEnter += new System.Windows.Forms.DragEventHandler(this.frmBackup_DragEnter);
             this.ResumeLayout(false);
             this.PerformLayout();
 

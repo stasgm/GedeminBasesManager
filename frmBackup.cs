@@ -12,6 +12,7 @@ namespace GedeminBasesManager
         string fbkFilter = "BK files|*.bk";
         TextBoxTraceListener _textBoxListener;
         Thread _messageGeneratingThread;
+        private bool isProcess = false;
 
         public frmBackup()
         {
@@ -58,7 +59,7 @@ namespace GedeminBasesManager
         }
 
         private void restoreBtn_Click(object sender, EventArgs e)
-        {
+        {           
             if (cbLog.Checked)
             { 
                 _textBoxListener = new TextBoxTraceListener(tbLogOut);
@@ -77,6 +78,7 @@ namespace GedeminBasesManager
 
         private void RunRestore()
         {
+            isProcess = true;
             try
             {
                 var backupKit = new BackupKit(usernameBox.Text, passwordBox.Text);
@@ -89,6 +91,33 @@ namespace GedeminBasesManager
             catch (IOException ex)
             {
                 MessageBox.Show(ex.Message);
+            }
+            isProcess = false;
+        }
+
+        private void frmBackup_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.All;
+        }
+
+        private void frmBackup_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+
+            if (files.Length == 0) return;
+
+            string FileName = files[0];            
+            if (Path.GetExtension(FileName) != ".bk")
+            {
+                MessageBox.Show("Невернный файл. Только для *.bk");
+                return;
+            }
+
+            var result = MessageBox.Show("Добавить " + FileName, "Внимание", MessageBoxButtons.YesNo);
+            
+            if (result  ==  DialogResult.Yes)
+            {
+                restoreSrcBox.Text = files[0];
             }
         }
     }

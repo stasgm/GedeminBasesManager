@@ -106,7 +106,7 @@ namespace FirebirdBackupKit
 
             File.Move(restoreTemp, dest);
 
-            Debug.WriteLine("Done restore");
+            //Debug.WriteLine("Done restore");
 
         }
 
