@@ -85,6 +85,10 @@
     <Compile Include="frmBackup.Designer.cs">
       <DependentUpon>frmBackup.cs</DependentUpon>
     </Compile>
+    <Compile Include="IObservable.cs" />
+    <Compile Include="IObserver.cs" />
+    <Compile Include="ListBoxObserver.cs" />
+    <Compile Include="ProgressData.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">

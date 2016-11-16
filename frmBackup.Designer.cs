@@ -47,6 +47,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.tbLogOut = new System.Windows.Forms.TextBox();
             this.cbLog = new System.Windows.Forms.CheckBox();
+            this.btnPassword = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label3
@@ -169,7 +170,7 @@
             this.restoreBtn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.restoreBtn.Name = "restoreBtn";
             this.restoreBtn.Size = new System.Drawing.Size(103, 27);
-            this.restoreBtn.TabIndex = 1;
+            this.restoreBtn.TabIndex = 0;
             this.restoreBtn.Text = "Restore backup";
             this.restoreBtn.UseVisualStyleBackColor = true;
             this.restoreBtn.Click += new System.EventHandler(this.restoreBtn_Click);
@@ -183,7 +184,7 @@
             this.tbDBName.Location = new System.Drawing.Point(26, 243);
             this.tbDBName.Name = "tbDBName";
             this.tbDBName.Size = new System.Drawing.Size(257, 20);
-            this.tbDBName.TabIndex = 0;
+            this.tbDBName.TabIndex = 1;
             this.tbDBName.TextChanged += new System.EventHandler(this.tbDBName_TextChanged);
             // 
             // label1
@@ -217,12 +218,23 @@
             this.cbLog.Text = "Show process log";
             this.cbLog.UseVisualStyleBackColor = true;
             // 
+            // btnPassword
+            // 
+            this.btnPassword.Location = new System.Drawing.Point(285, 169);
+            this.btnPassword.Name = "btnPassword";
+            this.btnPassword.Size = new System.Drawing.Size(107, 23);
+            this.btnPassword.TabIndex = 44;
+            this.btnPassword.Text = "Set password";
+            this.btnPassword.UseVisualStyleBackColor = true;
+            this.btnPassword.Click += new System.EventHandler(this.btnPassword_Click);
+            // 
             // frmBackup
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(822, 281);
+            this.Controls.Add(this.btnPassword);
             this.Controls.Add(this.cbLog);
             this.Controls.Add(this.tbLogOut);
             this.Controls.Add(this.label1);
@@ -273,5 +285,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox tbLogOut;
         private System.Windows.Forms.CheckBox cbLog;
+        private System.Windows.Forms.Button btnPassword;
     }
 }

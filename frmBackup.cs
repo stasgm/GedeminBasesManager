@@ -4,18 +4,33 @@ using FirebirdBackupKit;
 using System.IO;
 using System.Diagnostics;
 using System.Threading;
+using FirebirdSql.Data.FirebirdClient;
 
 namespace GedeminBasesManager
 {
     public partial class frmBackup : Form
     {
-        string fbkFilter = "BK files|*.bk";
-        TextBoxTraceListener _textBoxListener;
-        Thread _messageGeneratingThread;
+        string fbkFilter = "BK files|*.bk";        
+        Thread _messageGeneratingThread;      
         private bool isProcess = false;
+        public ProgressData tb;
+        //FbConnection fb;
+
+        public static class CallBackMy
+        {
+            public delegate void callbackEvent(string what);
+            public static callbackEvent callbackEventHandler;
+        }
+
+        public void addText(string text)
+        {
+            SetValue(text);
+        }
 
         public frmBackup()
         {
+            //CallBackMy.callbackEventHandler = new CallBackMy.callbackEvent(this.SetValue);
+            //tb = new ProgressData();
             InitializeComponent();
         }
 
@@ -59,15 +74,25 @@ namespace GedeminBasesManager
         }
 
         private void restoreBtn_Click(object sender, EventArgs e)
-        {           
-            if (cbLog.Checked)
-            { 
-                _textBoxListener = new TextBoxTraceListener(tbLogOut);
-                Debug.Listeners.Add(_textBoxListener);
+        {
+            if (isProcess)
+            {
+                MessageBox.Show("Proccess in progress");
             }
+            else
+            {
+                if (cbLog.Checked)
+                {
+                    tb = new ProgressData();
+                    ListBoxObserver lbox = new ListBoxObserver(tbLogOut);
+                    tb.AddObserver(lbox);
+                    //  _textBoxListener = new TextBoxTraceListener(tbLogOut);
+                    //Debug.Listeners.Add(_textBoxListener);
 
-            _messageGeneratingThread = new Thread(new ThreadStart(RunRestore));
-            _messageGeneratingThread.Start();
+                }
+                _messageGeneratingThread = new Thread(new ThreadStart(RunRestore));
+                _messageGeneratingThread.Start();
+            }
 
         }
 
@@ -107,9 +132,9 @@ namespace GedeminBasesManager
             if (files.Length == 0) return;
 
             string FileName = files[0];            
-            if (Path.GetExtension(FileName) != ".bk")
+            if (Path.GetExtension(FileName) != ".bk" && Path.GetExtension(FileName) != ".fdb")
             {
-                MessageBox.Show("Невернный файл. Только для *.bk");
+                MessageBox.Show("Невернный файл. Только для *.bk или *.fdb");
                 return;
             }
 
@@ -117,11 +142,76 @@ namespace GedeminBasesManager
             
             if (result  ==  DialogResult.Yes)
             {
-                restoreSrcBox.Text = files[0];
+                if (Path.GetExtension(FileName).ToUpper() == ".FDB")
+                {
+                    tbDBName.Text = "";
+                    restoreDestBox.Text = files[0];
+                    restoreSrcBox.Text = "";
+                }
+                else
+                {
+                    restoreSrcBox.Text = files[0];
+                }
+                
             }
+        }
+
+        delegate void SetTextCallback(string text);
+        private void SetValue(string text)
+        {
+            // InvokeRequired required compares the thread ID of the
+            // calling thread to the thread ID of the creating thread.
+            // If these threads are different, it returns true.
+            if (tb.InvokeRequired())
+            {
+                SetTextCallback d = new SetTextCallback(SetValue);
+                Invoke(d, new object[] { text });
+            }
+            else
+            {
+                tb.AddText(text);
+            }
+        }
+
+        private void btnPassword_Click(object sender, EventArgs e)
+        {
+            // Set the ServerType to 1 for connect to the embedded server
+            FbConnectionStringBuilder fb_con = new FbConnectionStringBuilder();
+            fb_con.Charset = "WIN1251"; //используемая кодировка
+            fb_con.UserID = "SYSDBA"; //логин
+            fb_con.Password = "masterkey"; //пароль
+            fb_con.Database = restoreDestBox.Text;
+            fb_con.Dialect = 3;
+
+            FbConnection myConnection = new FbConnection(fb_con.ToString());
+            myConnection.Open();
+
+            FbTransaction myTransaction = myConnection.BeginTransaction();
+
+            FbCommand myCommand = new FbCommand();
+            myCommand.CommandText =
+                "UPDATE GD_USER SET PASSW = 'Administrator' " +
+                "WHERE NAME = 'Administrator'";
+
+            myCommand.Connection = myConnection;
+            myCommand.Transaction = myTransaction;
+            // Execute Update
+            myCommand.ExecuteNonQuery();
+
+            // Commit changes
+            myTransaction.Commit();
+
+            // Free command resources in Firebird Server
+            myCommand.Dispose();
+
+            // Close connection
+            myConnection.Close();
+
+            MessageBox.Show("Default password was set");
         }
     }
 
+    /*
     public class TextBoxTraceListener : TraceListener
     {
         private TextBox _target;
@@ -150,4 +240,5 @@ namespace GedeminBasesManager
             _target.AppendText(message + "\r");
         }
     }   
+    */
 }

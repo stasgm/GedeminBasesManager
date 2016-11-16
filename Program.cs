@@ -1,19 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace GedeminBasesManager
 {
     static class Program
     {
+        //public frmBackup frm;
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
-        [STAThread]
-        static void Main()
+        [STAThread]        
+        static void Main()             
         {
+            frmBackup frm;
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
@@ -22,7 +22,9 @@ namespace GedeminBasesManager
             if (arguments.Length == 1) {
                 Application.Run(new frmSettings());
             }else{
-                Application.Run(new frmBackup(arguments));
+                frm = new frmBackup(arguments);
+                Application.Run(frm);
+                //Application.Run(new frmBackup(arguments));
             }
         }
     }

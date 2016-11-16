@@ -7,6 +7,9 @@ using FirebirdSql.Data.Services;
 using System.IO;
 using System.Diagnostics;
 using System.Threading;
+using System.ComponentModel;
+using System.Windows.Forms;
+using GedeminBasesManager;
 
 namespace FirebirdBackupKit
 {
@@ -40,6 +43,8 @@ namespace FirebirdBackupKit
             if (File.Exists(dest))
                 throw new IOException("Destination file already exists");
 
+            //frmBackup.addText("Backing up database");
+          
             Debug.WriteLine("Backing up database");
             Debug.WriteLine("Source: {0} ({1})", source, GetFileSize(source));
             Debug.WriteLine("Destination: {0}", dest, null);
@@ -98,6 +103,7 @@ namespace FirebirdBackupKit
 
             restore.ServiceOutput += ServiceOutput;
 
+            //Program.
             restore.Execute();
 
             Debug.WriteLine("Restore complete - {0} ({1})", restoreTemp, GetFileSize(restoreTemp));
@@ -105,9 +111,6 @@ namespace FirebirdBackupKit
             Debug.WriteLine("Renaming temp restore file to - {0}", dest, null);
 
             File.Move(restoreTemp, dest);
-
-            //Debug.WriteLine("Done restore");
-
         }
 
         public void Copy(string source, string dest)
