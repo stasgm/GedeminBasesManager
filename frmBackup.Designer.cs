@@ -48,6 +48,9 @@
             this.tbLogOut = new System.Windows.Forms.TextBox();
             this.cbLog = new System.Windows.Forms.CheckBox();
             this.btnPassword = new System.Windows.Forms.Button();
+            this.cbIsDeleteBK = new System.Windows.Forms.CheckBox();
+            this.cbIsResetPassword = new System.Windows.Forms.CheckBox();
+            this.btnDeleteBK = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label3
@@ -98,10 +101,10 @@
             // restoreDestBtn
             // 
             this.restoreDestBtn.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.restoreDestBtn.Location = new System.Drawing.Point(366, 196);
+            this.restoreDestBtn.Location = new System.Drawing.Point(366, 194);
             this.restoreDestBtn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.restoreDestBtn.Name = "restoreDestBtn";
-            this.restoreDestBtn.Size = new System.Drawing.Size(26, 21);
+            this.restoreDestBtn.Size = new System.Drawing.Size(26, 23);
             this.restoreDestBtn.TabIndex = 39;
             this.restoreDestBtn.Text = "…";
             this.restoreDestBtn.UseVisualStyleBackColor = true;
@@ -110,10 +113,10 @@
             // restoreSrcBtn
             // 
             this.restoreSrcBtn.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.restoreSrcBtn.Location = new System.Drawing.Point(366, 147);
+            this.restoreSrcBtn.Location = new System.Drawing.Point(366, 145);
             this.restoreSrcBtn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.restoreSrcBtn.Name = "restoreSrcBtn";
-            this.restoreSrcBtn.Size = new System.Drawing.Size(26, 21);
+            this.restoreSrcBtn.Size = new System.Drawing.Size(26, 23);
             this.restoreSrcBtn.TabIndex = 38;
             this.restoreSrcBtn.Text = "…";
             this.restoreSrcBtn.UseVisualStyleBackColor = true;
@@ -150,28 +153,28 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(23, 179);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(63, 13);
+            this.label6.Size = new System.Drawing.Size(110, 13);
             this.label6.TabIndex = 34;
-            this.label6.Text = "Destination:";
+            this.label6.Text = "Путь к базе данных:";
             // 
             // label7
             // 
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(23, 131);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(44, 13);
+            this.label7.Size = new System.Drawing.Size(149, 13);
             this.label7.TabIndex = 33;
-            this.label7.Text = "Source:";
+            this.label7.Text = "Путь к архиву базы данных:";
             // 
             // restoreBtn
             // 
-            this.restoreBtn.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.restoreBtn.Location = new System.Drawing.Point(289, 240);
+            this.restoreBtn.Font = new System.Drawing.Font("Trebuchet MS", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.restoreBtn.Location = new System.Drawing.Point(275, 269);
             this.restoreBtn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.restoreBtn.Name = "restoreBtn";
-            this.restoreBtn.Size = new System.Drawing.Size(103, 27);
+            this.restoreBtn.Size = new System.Drawing.Size(117, 39);
             this.restoreBtn.TabIndex = 0;
-            this.restoreBtn.Text = "Restore backup";
+            this.restoreBtn.Text = "Восстановить";
             this.restoreBtn.UseVisualStyleBackColor = true;
             this.restoreBtn.Click += new System.EventHandler(this.restoreBtn_Click);
             // 
@@ -183,7 +186,7 @@
             // 
             this.tbDBName.Location = new System.Drawing.Point(26, 243);
             this.tbDBName.Name = "tbDBName";
-            this.tbDBName.Size = new System.Drawing.Size(257, 20);
+            this.tbDBName.Size = new System.Drawing.Size(366, 20);
             this.tbDBName.TabIndex = 1;
             this.tbDBName.TextChanged += new System.EventHandler(this.tbDBName_TextChanged);
             // 
@@ -192,9 +195,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(23, 227);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(85, 13);
+            this.label1.Size = new System.Drawing.Size(136, 13);
             this.label1.TabIndex = 41;
-            this.label1.Text = "Database name:";
+            this.label1.Text = "Имя файла базы данных:";
             // 
             // tbLogOut
             // 
@@ -203,7 +206,7 @@
             this.tbLogOut.Multiline = true;
             this.tbLogOut.Name = "tbLogOut";
             this.tbLogOut.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.tbLogOut.Size = new System.Drawing.Size(412, 238);
+            this.tbLogOut.Size = new System.Drawing.Size(412, 234);
             this.tbLogOut.TabIndex = 42;
             // 
             // cbLog
@@ -213,27 +216,62 @@
             this.cbLog.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbLog.Location = new System.Drawing.Point(398, 6);
             this.cbLog.Name = "cbLog";
-            this.cbLog.Size = new System.Drawing.Size(110, 17);
+            this.cbLog.Size = new System.Drawing.Size(207, 17);
             this.cbLog.TabIndex = 43;
-            this.cbLog.Text = "Show process log";
+            this.cbLog.Text = "Выводить процесс восстановления";
             this.cbLog.UseVisualStyleBackColor = true;
             // 
             // btnPassword
             // 
-            this.btnPassword.Location = new System.Drawing.Point(285, 169);
+            this.btnPassword.Location = new System.Drawing.Point(398, 269);
             this.btnPassword.Name = "btnPassword";
-            this.btnPassword.Size = new System.Drawing.Size(107, 23);
+            this.btnPassword.Size = new System.Drawing.Size(122, 39);
             this.btnPassword.TabIndex = 44;
-            this.btnPassword.Text = "Set password";
+            this.btnPassword.Text = "Сбросить пароль";
             this.btnPassword.UseVisualStyleBackColor = true;
             this.btnPassword.Click += new System.EventHandler(this.btnPassword_Click);
+            // 
+            // cbIsDeleteBK
+            // 
+            this.cbIsDeleteBK.AutoSize = true;
+            this.cbIsDeleteBK.Location = new System.Drawing.Point(26, 269);
+            this.cbIsDeleteBK.Name = "cbIsDeleteBK";
+            this.cbIsDeleteBK.Size = new System.Drawing.Size(115, 17);
+            this.cbIsDeleteBK.TabIndex = 45;
+            this.cbIsDeleteBK.Text = "Удалить файл BK";
+            this.cbIsDeleteBK.UseVisualStyleBackColor = true;
+            // 
+            // cbIsResetPassword
+            // 
+            this.cbIsResetPassword.AutoSize = true;
+            this.cbIsResetPassword.Checked = true;
+            this.cbIsResetPassword.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbIsResetPassword.Location = new System.Drawing.Point(26, 292);
+            this.cbIsResetPassword.Name = "cbIsResetPassword";
+            this.cbIsResetPassword.Size = new System.Drawing.Size(113, 17);
+            this.cbIsResetPassword.TabIndex = 46;
+            this.cbIsResetPassword.Text = "Сбросить пароль";
+            this.cbIsResetPassword.UseVisualStyleBackColor = true;
+            // 
+            // btnDeleteBK
+            // 
+            this.btnDeleteBK.Location = new System.Drawing.Point(526, 270);
+            this.btnDeleteBK.Name = "btnDeleteBK";
+            this.btnDeleteBK.Size = new System.Drawing.Size(122, 39);
+            this.btnDeleteBK.TabIndex = 47;
+            this.btnDeleteBK.Text = "Удалить Backup";
+            this.btnDeleteBK.UseVisualStyleBackColor = true;
+            this.btnDeleteBK.Click += new System.EventHandler(this.btnDeleteBK_Click);
             // 
             // frmBackup
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(822, 281);
+            this.ClientSize = new System.Drawing.Size(822, 316);
+            this.Controls.Add(this.btnDeleteBK);
+            this.Controls.Add(this.cbIsResetPassword);
+            this.Controls.Add(this.cbIsDeleteBK);
             this.Controls.Add(this.btnPassword);
             this.Controls.Add(this.cbLog);
             this.Controls.Add(this.tbLogOut);
@@ -286,5 +324,8 @@
         private System.Windows.Forms.TextBox tbLogOut;
         private System.Windows.Forms.CheckBox cbLog;
         private System.Windows.Forms.Button btnPassword;
+        private System.Windows.Forms.CheckBox cbIsDeleteBK;
+        private System.Windows.Forms.CheckBox cbIsResetPassword;
+        private System.Windows.Forms.Button btnDeleteBK;
     }
 }

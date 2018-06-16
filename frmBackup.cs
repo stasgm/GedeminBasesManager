@@ -10,12 +10,53 @@ namespace GedeminBasesManager
 {
     public partial class frmBackup : Form
     {
-        string fbkFilter = "BK files|*.bk";        
+        string fbkFilter = "BK файл|*.bk";        
         Thread _messageGeneratingThread;      
         private bool isProcess = false;
         public ProgressData tb;
         //FbConnection fb;
 
+        public void DeleteBackup()
+        {
+            String FileName = restoreSrcBox.Text;
+            if (File.Exists(FileName)) File.Delete(FileName);            
+        }
+
+        public void ResetPassword()
+        {
+            FbConnectionStringBuilder fb_con = new FbConnectionStringBuilder();
+            fb_con.Charset = "WIN1251"; //используемая кодировка
+            fb_con.UserID = "SYSDBA"; //логин
+            fb_con.Password = "masterkey"; //пароль
+            fb_con.Database = restoreDestBox.Text;
+            fb_con.Dialect = 3;
+
+            FbConnection myConnection = new FbConnection(fb_con.ToString());
+            myConnection.Open();
+
+            FbTransaction myTransaction = myConnection.BeginTransaction();
+
+            FbCommand myCommand = new FbCommand();
+            myCommand.CommandText =
+                "UPDATE GD_USER SET PASSW = 'Administrator' " +
+                "WHERE NAME = 'Administrator'";
+
+            myCommand.Connection = myConnection;
+            myCommand.Transaction = myTransaction;
+            // Execute Update
+            myCommand.ExecuteNonQuery();
+
+            // Commit changes
+            myTransaction.Commit();
+
+            // Free command resources in Firebird Server
+            myCommand.Dispose();
+
+            // Close connection
+            myConnection.Close();
+
+            MessageBox.Show("Пароль SYSDBA был сброшен");
+        }
         public static class CallBackMy
         {
             public delegate void callbackEvent(string what);
@@ -55,7 +96,7 @@ namespace GedeminBasesManager
         {
             openFileDiag.Filter = fbkFilter;
             openFileDiag.FileName = null;
-            openFileDiag.Title = "Restore database source";
+            openFileDiag.Title = "Путь к архивной копии базы данных"; // Restore database source
             openFileDiag.CheckFileExists = true;
 
             if (openFileDiag.ShowDialog() == DialogResult.OK)
@@ -66,7 +107,7 @@ namespace GedeminBasesManager
         {
             openFileDiag.Filter = fbkFilter;
             openFileDiag.FileName = null;
-            openFileDiag.Title = "Restore database destination";
+            openFileDiag.Title = "Путь к восстановленной базе данных"; // Restore database destination
             openFileDiag.CheckFileExists = false;
 
             if (openFileDiag.ShowDialog() == DialogResult.OK)
@@ -77,7 +118,7 @@ namespace GedeminBasesManager
         {
             if (isProcess)
             {
-                MessageBox.Show("Proccess in progress");
+                MessageBox.Show("Уже в процессе восстановления");
             }
             else
             {
@@ -107,7 +148,7 @@ namespace GedeminBasesManager
             try
             {
                 var backupKit = new BackupKit(usernameBox.Text, passwordBox.Text);
-                backupKit.Restore(restoreSrcBox.Text, restoreDestBox.Text);
+                backupKit.Restore(restoreSrcBox.Text, restoreDestBox.Text, tbLogOut);
             }
             catch (ArgumentException ex)
             {
@@ -117,6 +158,8 @@ namespace GedeminBasesManager
             {
                 MessageBox.Show(ex.Message);
             }
+            if (cbIsResetPassword.Checked) ResetPassword();
+            if (cbIsDeleteBK.Checked) DeleteBackup();
             isProcess = false;
         }
 
@@ -176,38 +219,12 @@ namespace GedeminBasesManager
         private void btnPassword_Click(object sender, EventArgs e)
         {
             // Set the ServerType to 1 for connect to the embedded server
-            FbConnectionStringBuilder fb_con = new FbConnectionStringBuilder();
-            fb_con.Charset = "WIN1251"; //используемая кодировка
-            fb_con.UserID = "SYSDBA"; //логин
-            fb_con.Password = "masterkey"; //пароль
-            fb_con.Database = restoreDestBox.Text;
-            fb_con.Dialect = 3;
+            ResetPassword();
+        }
 
-            FbConnection myConnection = new FbConnection(fb_con.ToString());
-            myConnection.Open();
-
-            FbTransaction myTransaction = myConnection.BeginTransaction();
-
-            FbCommand myCommand = new FbCommand();
-            myCommand.CommandText =
-                "UPDATE GD_USER SET PASSW = 'Administrator' " +
-                "WHERE NAME = 'Administrator'";
-
-            myCommand.Connection = myConnection;
-            myCommand.Transaction = myTransaction;
-            // Execute Update
-            myCommand.ExecuteNonQuery();
-
-            // Commit changes
-            myTransaction.Commit();
-
-            // Free command resources in Firebird Server
-            myCommand.Dispose();
-
-            // Close connection
-            myConnection.Close();
-
-            MessageBox.Show("Default password was set");
+        private void btnDeleteBK_Click(object sender, EventArgs e)
+        {
+            DeleteBackup();
         }
     }
 

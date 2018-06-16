@@ -15,7 +15,7 @@ namespace FirebirdBackupKit
 {
     public class BackupKit
     {
-
+        public TextBox tb;
         public string Username { get; set; }
 
         public string Password { get; set; }
@@ -75,22 +75,29 @@ namespace FirebirdBackupKit
 
         }
 
-        public void Restore(string source, string dest)
+        public void Restore(string source, string dest, TextBox tbLog)
         {
+            tb = tbLog;
 
             if (!File.Exists(source))
-                throw new FileNotFoundException("Source file not found", source);
+                throw new FileNotFoundException("Файл архива базы данных не найден", source);
 
             if (File.Exists(dest))
-                throw new IOException("Destination file already exists");
+                throw new IOException("Файл базы данных уже существует");
 
+            tb.Text = String.Format("Начат процесс восстановления базы данных: {0}" + Environment.NewLine, DateTime.Now);
+            //tbLog.AppendText("Source: {0} ({1})", source, GetFileSize(source));
+            //tbLog.AppendText("Destination: {0}", dest, null);
+            /*
             Debug.WriteLine("Restoring database");
             Debug.WriteLine("Source: {0} ({1})", source, GetFileSize(source));
             Debug.WriteLine("Destination: {0}", dest, null);
+            */
 
             string restoreTemp = GetTempName(dest);
 
-            Debug.WriteLine("Restoring to temp file - {0}", restoreTemp, null);
+            tb.AppendText(String.Format("Временный файл: {0}" + Environment.NewLine + Environment.NewLine, restoreTemp));
+            //Debug.WriteLine("Restoring to temp file - {0}", restoreTemp, null);
 
             FbRestore restore = new FbRestore()
             {
@@ -104,13 +111,24 @@ namespace FirebirdBackupKit
             restore.ServiceOutput += ServiceOutput;
 
             //Program.
-            restore.Execute();
+            try
+            {
+                restore.Execute();
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show(ex.Message);
+                throw;
+                // Удалить временный файл
+            }
 
-            Debug.WriteLine("Restore complete - {0} ({1})", restoreTemp, GetFileSize(restoreTemp));
-
-            Debug.WriteLine("Renaming temp restore file to - {0}", dest, null);
+            //Debug.WriteLine("Restore complete - {0} ({1})", restoreTemp, GetFileSize(restoreTemp));
+            tb.AppendText("Переименование временного файла" + Environment.NewLine + Environment.NewLine);
+            //Debug.WriteLine("Renaming temp restore file to - {0}", dest, null);
 
             File.Move(restoreTemp, dest);
+            tb.AppendText(String.Format("Закончен процесс восстановления базы данных: {0}" + Environment.NewLine, DateTime.Now));
+            MessageBox.Show("Закончен процесс восстановления базы данных!");
         }
 
         public void Copy(string source, string dest)
@@ -178,6 +196,7 @@ namespace FirebirdBackupKit
 
         void ServiceOutput(object sender, ServiceOutputEventArgs e)
         {
+            tb.AppendText(String.Format(e.Message + Environment.NewLine));
             Debug.WriteLine(e.Message);
         }
 
