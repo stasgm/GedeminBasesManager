@@ -19,7 +19,11 @@ namespace GedeminBasesManager
         public void DeleteBackup()
         {
             String FileName = restoreSrcBox.Text;
-            if (File.Exists(FileName)) File.Delete(FileName);            
+            if (File.Exists(FileName))
+            {
+                File.Delete(FileName);
+                tbLogOut.AppendText(Environment.NewLine + String.Format("Файл архива базы данных '{0}' удалён" + Environment.NewLine, FileName));
+            }
         }
 
         public void ResetPassword()
@@ -55,18 +59,22 @@ namespace GedeminBasesManager
             // Close connection
             myConnection.Close();
 
-            MessageBox.Show("Пароль SYSDBA был сброшен");
+            tbLogOut.AppendText(Environment.NewLine + "Пароль SYSDBA был сброшен на значение по умолчанию" + Environment.NewLine);
         }
+        /*
         public static class CallBackMy
         {
             public delegate void callbackEvent(string what);
             public static callbackEvent callbackEventHandler;
         }
+        */
 
+        /*
         public void addText(string text)
         {
             SetValue(text);
         }
+        */
 
         public frmBackup()
         {
@@ -118,15 +126,15 @@ namespace GedeminBasesManager
         {
             if (isProcess)
             {
-                MessageBox.Show("Уже в процессе восстановления");
+                MessageBox.Show("В процессе восстановления");
             }
             else
             {
                 if (cbLog.Checked)
                 {
-                    tb = new ProgressData();
-                    ListBoxObserver lbox = new ListBoxObserver(tbLogOut);
-                    tb.AddObserver(lbox);
+                    //tb = new ProgressData();
+                    //ListBoxObserver lbox = new ListBoxObserver(tbLogOut);
+                    //tb.AddObserver(lbox);
                     //  _textBoxListener = new TextBoxTraceListener(tbLogOut);
                     //Debug.Listeners.Add(_textBoxListener);
 
@@ -158,8 +166,10 @@ namespace GedeminBasesManager
             {
                 MessageBox.Show(ex.Message);
             }
+
             if (cbIsResetPassword.Checked) ResetPassword();
             if (cbIsDeleteBK.Checked) DeleteBackup();
+            MessageBox.Show("Закончен процесс восстановления базы данных!");
             isProcess = false;
         }
 
@@ -199,6 +209,7 @@ namespace GedeminBasesManager
             }
         }
 
+        /*
         delegate void SetTextCallback(string text);
         private void SetValue(string text)
         {
@@ -215,6 +226,7 @@ namespace GedeminBasesManager
                 tb.AddText(text);
             }
         }
+        */
 
         private void btnPassword_Click(object sender, EventArgs e)
         {
@@ -225,6 +237,41 @@ namespace GedeminBasesManager
         private void btnDeleteBK_Click(object sender, EventArgs e)
         {
             DeleteBackup();
+        }
+
+        private void BtnClearLog_Click(object sender, EventArgs e)
+        {
+            tbLogOut.Clear();
+        }
+
+        private void BtnSQLCommand_Click(object sender, EventArgs e)
+        {
+            FbConnectionStringBuilder fb_con = new FbConnectionStringBuilder();
+            fb_con.Charset = "WIN1251"; //используемая кодировка
+            fb_con.UserID = "SYSDBA"; //логин
+            fb_con.Password = "masterkey"; //пароль
+            fb_con.Database = restoreDestBox.Text;
+            fb_con.Dialect = 3;
+
+            FbConnection myConnection = new FbConnection(fb_con.ToString());
+            myConnection.Open();
+
+            FbTransaction myTransaction = myConnection.BeginTransaction();
+
+            String SQLCommand = "UPDATE GD_USER SET IBPASSWORD = 'masterkey' WHERE IBNAME = 'SYSDBA'";
+            if (tbLogOut.Text.Length > 0) SQLCommand = tbLogOut.Text;
+
+            FbCommand myCommand = new FbCommand();
+            myCommand.CommandText = SQLCommand;
+
+            myCommand.Connection = myConnection;
+            myCommand.Transaction = myTransaction;
+            myCommand.ExecuteNonQuery();
+            myTransaction.Commit();
+            myCommand.Dispose();
+            myConnection.Close();
+
+            MessageBox.Show("SQL запрос выполнен!");
         }
     }
 

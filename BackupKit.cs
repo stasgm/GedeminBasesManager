@@ -128,7 +128,6 @@ namespace FirebirdBackupKit
 
             File.Move(restoreTemp, dest);
             tb.AppendText(String.Format("Закончен процесс восстановления базы данных: {0}" + Environment.NewLine, DateTime.Now));
-            MessageBox.Show("Закончен процесс восстановления базы данных!");
         }
 
         public void Copy(string source, string dest)
