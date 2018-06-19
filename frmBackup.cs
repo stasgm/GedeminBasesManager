@@ -273,6 +273,25 @@ namespace GedeminBasesManager
 
             MessageBox.Show("SQL запрос выполнен!");
         }
+
+        private void btnOpenDB_Click(object sender, EventArgs e)
+        {
+            Process p = new Process();
+            ProcessStartInfo pi = new ProcessStartInfo();
+            pi.UseShellExecute = true;
+            pi.FileName = restoreDestBox.Text;
+            p.StartInfo = pi;
+
+            try
+            {
+                p.Start();
+            }
+            catch (Exception Ex)
+            {
+                //MessageBox.Show(Ex.Message);
+            }
+
+        }
     }
 
     /*

@@ -53,6 +53,7 @@
             this.btnDeleteBK = new System.Windows.Forms.Button();
             this.BtnSQLCommand = new System.Windows.Forms.Button();
             this.BtnClearLog = new System.Windows.Forms.Button();
+            this.btnOpenDB = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label3
@@ -216,7 +217,7 @@
             this.cbLog.AutoSize = true;
             this.cbLog.Checked = true;
             this.cbLog.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbLog.Location = new System.Drawing.Point(398, 13);
+            this.cbLog.Location = new System.Drawing.Point(366, 14);
             this.cbLog.Name = "cbLog";
             this.cbLog.Size = new System.Drawing.Size(207, 17);
             this.cbLog.TabIndex = 43;
@@ -257,7 +258,7 @@
             // 
             // btnDeleteBK
             // 
-            this.btnDeleteBK.Location = new System.Drawing.Point(252, 295);
+            this.btnDeleteBK.Location = new System.Drawing.Point(252, 296);
             this.btnDeleteBK.Name = "btnDeleteBK";
             this.btnDeleteBK.Size = new System.Drawing.Size(108, 39);
             this.btnDeleteBK.TabIndex = 47;
@@ -285,12 +286,23 @@
             this.BtnClearLog.UseVisualStyleBackColor = true;
             this.BtnClearLog.Click += new System.EventHandler(this.BtnClearLog_Click);
             // 
+            // btnOpenDB
+            // 
+            this.btnOpenDB.Location = new System.Drawing.Point(252, 100);
+            this.btnOpenDB.Name = "btnOpenDB";
+            this.btnOpenDB.Size = new System.Drawing.Size(108, 39);
+            this.btnOpenDB.TabIndex = 50;
+            this.btnOpenDB.Text = "Открыть БД";
+            this.btnOpenDB.UseVisualStyleBackColor = true;
+            this.btnOpenDB.Click += new System.EventHandler(this.btnOpenDB_Click);
+            // 
             // frmBackup
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(830, 341);
+            this.Controls.Add(this.btnOpenDB);
             this.Controls.Add(this.BtnClearLog);
             this.Controls.Add(this.BtnSQLCommand);
             this.Controls.Add(this.btnDeleteBK);
@@ -353,5 +365,6 @@
         private System.Windows.Forms.Button btnDeleteBK;
         private System.Windows.Forms.Button BtnSQLCommand;
         private System.Windows.Forms.Button BtnClearLog;
+        private System.Windows.Forms.Button btnOpenDB;
     }
 }
