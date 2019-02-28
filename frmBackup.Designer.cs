@@ -111,7 +111,7 @@
             this.restoreDestBtn.TabIndex = 39;
             this.restoreDestBtn.Text = "…";
             this.restoreDestBtn.UseVisualStyleBackColor = true;
-            this.restoreDestBtn.Click += new System.EventHandler(this.restoreDestBtn_Click);
+            this.restoreDestBtn.Click += new System.EventHandler(this.RestoreDestBtn_Click);
             // 
             // restoreSrcBtn
             // 
@@ -123,7 +123,7 @@
             this.restoreSrcBtn.TabIndex = 38;
             this.restoreSrcBtn.Text = "…";
             this.restoreSrcBtn.UseVisualStyleBackColor = true;
-            this.restoreSrcBtn.Click += new System.EventHandler(this.restoreSrcBtn_Click);
+            this.restoreSrcBtn.Click += new System.EventHandler(this.RestoreSrcBtn_Click);
             // 
             // label5
             // 
@@ -179,7 +179,7 @@
             this.restoreBtn.TabIndex = 0;
             this.restoreBtn.Text = "Восстановить";
             this.restoreBtn.UseVisualStyleBackColor = true;
-            this.restoreBtn.Click += new System.EventHandler(this.restoreBtn_Click);
+            this.restoreBtn.Click += new System.EventHandler(this.RestoreBtn_Click);
             // 
             // openFileDiag
             // 
@@ -191,7 +191,7 @@
             this.tbDBName.Name = "tbDBName";
             this.tbDBName.Size = new System.Drawing.Size(334, 20);
             this.tbDBName.TabIndex = 1;
-            this.tbDBName.TextChanged += new System.EventHandler(this.tbDBName_TextChanged);
+            this.tbDBName.TextChanged += new System.EventHandler(this.TbDBName_TextChanged);
             // 
             // label1
             // 
@@ -232,7 +232,7 @@
             this.btnPassword.TabIndex = 44;
             this.btnPassword.Text = "Сбросить пароль";
             this.btnPassword.UseVisualStyleBackColor = true;
-            this.btnPassword.Click += new System.EventHandler(this.btnPassword_Click);
+            this.btnPassword.Click += new System.EventHandler(this.BtnPassword_Click);
             // 
             // cbIsDeleteBK
             // 
@@ -264,7 +264,7 @@
             this.btnDeleteBK.TabIndex = 47;
             this.btnDeleteBK.Text = "Удалить Backup";
             this.btnDeleteBK.UseVisualStyleBackColor = true;
-            this.btnDeleteBK.Click += new System.EventHandler(this.btnDeleteBK_Click);
+            this.btnDeleteBK.Click += new System.EventHandler(this.BtnDeleteBK_Click);
             // 
             // BtnSQLCommand
             // 
@@ -294,7 +294,7 @@
             this.btnOpenDB.TabIndex = 50;
             this.btnOpenDB.Text = "Открыть БД";
             this.btnOpenDB.UseVisualStyleBackColor = true;
-            this.btnOpenDB.Click += new System.EventHandler(this.btnOpenDB_Click);
+            this.btnOpenDB.Click += new System.EventHandler(this.BtnOpenDB_Click);
             // 
             // frmBackup
             // 
@@ -332,8 +332,8 @@
             this.Name = "frmBackup";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Restore backup";
-            this.DragDrop += new System.Windows.Forms.DragEventHandler(this.frmBackup_DragDrop);
-            this.DragEnter += new System.Windows.Forms.DragEventHandler(this.frmBackup_DragEnter);
+            this.DragDrop += new System.Windows.Forms.DragEventHandler(this.FrmBackup_DragDrop);
+            this.DragEnter += new System.Windows.Forms.DragEventHandler(this.FrmBackup_DragEnter);
             this.ResumeLayout(false);
             this.PerformLayout();
 

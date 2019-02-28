@@ -123,7 +123,7 @@ namespace FirebirdBackupKit
             }
 
             //Debug.WriteLine("Restore complete - {0} ({1})", restoreTemp, GetFileSize(restoreTemp));
-            tb.AppendText("Переименование временного файла" + Environment.NewLine + Environment.NewLine);
+            tb.AppendText(Environment.NewLine + "Переименование временного файла" + Environment.NewLine + Environment.NewLine);
             //Debug.WriteLine("Renaming temp restore file to - {0}", dest, null);
 
             File.Move(restoreTemp, dest);

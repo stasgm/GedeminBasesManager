@@ -10,11 +10,11 @@ namespace GedeminBasesManager
 {
     public partial class frmBackup : Form
     {
-        string fbkFilter = "BK файл|*.bk";        
+        string fbkFilter = "BK файл|*.bk";    
+        
         Thread _messageGeneratingThread;      
         private bool isProcess = false;
         public ProgressData tb;
-        //FbConnection fb;
 
         public void DeleteBackup()
         {
@@ -26,27 +26,71 @@ namespace GedeminBasesManager
             }
         }
 
-        public void ResetPassword()
+        public void GenNewDBID()
         {
-            FbConnectionStringBuilder fb_con = new FbConnectionStringBuilder();
-            fb_con.Charset = "WIN1251"; //используемая кодировка
-            fb_con.UserID = "SYSDBA"; //логин
-            fb_con.Password = "masterkey"; //пароль
-            fb_con.Database = restoreDestBox.Text;
-            fb_con.Dialect = 3;
+            // Новый ID базы данных
+            FbConnectionStringBuilder fb_con = new FbConnectionStringBuilder
+            {
+                Charset = "WIN1251", //используемая кодировка
+                UserID = "SYSDBA", //логин
+                Password = "masterkey", //пароль
+                Database = restoreDestBox.Text,
+                Dialect = 3
+            };
 
             FbConnection myConnection = new FbConnection(fb_con.ToString());
             myConnection.Open();
 
             FbTransaction myTransaction = myConnection.BeginTransaction();
 
-            FbCommand myCommand = new FbCommand();
-            myCommand.CommandText =
-                "UPDATE GD_USER SET PASSW = 'Administrator' " +
-                "WHERE NAME = 'Administrator'";
+            FbCommand myCommand = new FbCommand
+            {
+                CommandText = "SELECT NEXT VALUE FOR GD_G_DBID FROM RDB$DATABASE",
+                Connection = myConnection,
+                Transaction = myTransaction
+            };
 
-            myCommand.Connection = myConnection;
-            myCommand.Transaction = myTransaction;
+            string iddb = "-1";
+
+            FbDataReader reader = myCommand.ExecuteReader();
+            if (reader.Read())
+            {
+                iddb = reader["GEN_ID"].ToString();
+            }
+
+                // myCommand.ExecuteNonQuery();
+            myTransaction.Commit();
+            myCommand.Dispose();
+            myConnection.Close();
+
+            tbLogOut.AppendText(String.Format(Environment.NewLine + "Присвоен новый DB ID  {0}" + Environment.NewLine, iddb));
+        }
+
+        public void ResetPassword()
+        {
+            FbConnectionStringBuilder fb_con = new FbConnectionStringBuilder
+            {
+                Charset = "WIN1251", //используемая кодировка
+                UserID = "SYSDBA", //логин
+                Password = "masterkey", //пароль
+                Database = restoreDestBox.Text,
+                Dialect = 3
+            };
+
+            FbConnection myConnection = new FbConnection(fb_con.ToString());
+            myConnection.Open();
+
+            FbTransaction myTransaction = myConnection.BeginTransaction();
+
+            FbCommand myCommand = new FbCommand
+            {
+                CommandText =
+                    "UPDATE GD_USER SET PASSW = 'Administrator' " +
+                    "WHERE NAME = 'Administrator'",
+
+                Connection = myConnection,
+                Transaction = myTransaction
+            };
             // Execute Update
             myCommand.ExecuteNonQuery();
 
@@ -61,25 +105,39 @@ namespace GedeminBasesManager
 
             tbLogOut.AppendText(Environment.NewLine + "Пароль SYSDBA был сброшен на значение по умолчанию" + Environment.NewLine);
         }
-        /*
-        public static class CallBackMy
-        {
-            public delegate void callbackEvent(string what);
-            public static callbackEvent callbackEventHandler;
-        }
-        */
 
-        /*
-        public void addText(string text)
+        public void ResetDBUser()
         {
-            SetValue(text);
+            FbConnectionStringBuilder fb_con = new FbConnectionStringBuilder
+            {
+                Charset = "WIN1251", //используемая кодировка
+                UserID = "SYSDBA", //логин
+                Password = "masterkey", //пароль
+                Database = restoreDestBox.Text,
+                Dialect = 3
+            };
+
+            FbConnection myConnection = new FbConnection(fb_con.ToString());
+            myConnection.Open();
+
+            FbTransaction myTransaction = myConnection.BeginTransaction();
+            
+            FbCommand myCommand = new FbCommand
+            {
+                CommandText = "UPDATE GD_USER SET IBPASSWORD = 'masterkey' WHERE IBNAME = 'SYSDBA'",
+                Connection = myConnection,
+                Transaction = myTransaction
+            };
+            myCommand.ExecuteNonQuery();
+            myTransaction.Commit();
+            myCommand.Dispose();
+            myConnection.Close();
+
+            tbLogOut.AppendText(Environment.NewLine + "Установлен пользователь DB SYSDBA и пароль сброшен на значение по умолчанию" + Environment.NewLine);
         }
-        */
 
         public frmBackup()
         {
-            //CallBackMy.callbackEventHandler = new CallBackMy.callbackEvent(this.SetValue);
-            //tb = new ProgressData();
             InitializeComponent();
         }
 
@@ -100,7 +158,7 @@ namespace GedeminBasesManager
             restoreDestBox.Text = Path.GetDirectoryName(backuppath) + "\\" + tbDBName.Text + ".fdb";
         }
 
-        private void restoreSrcBtn_Click(object sender, EventArgs e)
+        private void RestoreSrcBtn_Click(object sender, EventArgs e)
         {
             openFileDiag.Filter = fbkFilter;
             openFileDiag.FileName = null;
@@ -111,7 +169,7 @@ namespace GedeminBasesManager
                 restoreSrcBox.Text = openFileDiag.FileName;
         }
 
-        private void restoreDestBtn_Click(object sender, EventArgs e)
+        private void RestoreDestBtn_Click(object sender, EventArgs e)
         {
             openFileDiag.Filter = fbkFilter;
             openFileDiag.FileName = null;
@@ -122,11 +180,11 @@ namespace GedeminBasesManager
                 restoreDestBox.Text = openFileDiag.FileName;
         }
 
-        private void restoreBtn_Click(object sender, EventArgs e)
+        private void RestoreBtn_Click(object sender, EventArgs e)
         {
             if (isProcess)
             {
-                MessageBox.Show("В процессе восстановления");
+                MessageBox.Show("В процессе восстановления", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
@@ -145,7 +203,7 @@ namespace GedeminBasesManager
 
         }
 
-        private void tbDBName_TextChanged(object sender, EventArgs e)
+        private void TbDBName_TextChanged(object sender, EventArgs e)
         {
             restoreDestBox.Text = Path.GetDirectoryName(restoreDestBox.Text) + "\\" + tbDBName.Text + ".fdb";
         }
@@ -167,18 +225,45 @@ namespace GedeminBasesManager
                 MessageBox.Show(ex.Message);
             }
 
+
+            // ResetDBUser();
+
             if (cbIsResetPassword.Checked) ResetPassword();
             if (cbIsDeleteBK.Checked) DeleteBackup();
-            MessageBox.Show("Закончен процесс восстановления базы данных!");
+
+            GenNewDBID();
+            GenNewDBID();
+
+            DialogResult dialogResult = MessageBox.Show("Закончен процесс восстановления базы данных!\nПодключиться к базе данных?" , "Внимание!", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (dialogResult == DialogResult.Yes)
+            {
+                Process p = new Process();
+                ProcessStartInfo pi = new ProcessStartInfo
+                {
+                    UseShellExecute = true,
+                    FileName = restoreDestBox.Text
+                };
+                p.StartInfo = pi;
+
+                try
+                {
+                    p.Start();
+                    Application.Exit(); 
+                }
+                catch (Exception Ex)
+                {
+                    MessageBox.Show(Ex.Message);
+                }
+            }
             isProcess = false;
         }
 
-        private void frmBackup_DragEnter(object sender, DragEventArgs e)
+        private void FrmBackup_DragEnter(object sender, DragEventArgs e)
         {
             e.Effect = DragDropEffects.All;
         }
 
-        private void frmBackup_DragDrop(object sender, DragEventArgs e)
+        private void FrmBackup_DragDrop(object sender, DragEventArgs e)
         {
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop, false);
 
@@ -187,11 +272,11 @@ namespace GedeminBasesManager
             string FileName = files[0];            
             if (Path.GetExtension(FileName) != ".bk" && Path.GetExtension(FileName) != ".fdb")
             {
-                MessageBox.Show("Невернный файл. Только для *.bk или *.fdb");
+                MessageBox.Show("Невернный файл. Только для *.bk или *.fdb", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            var result = MessageBox.Show("Добавить " + FileName, "Внимание", MessageBoxButtons.YesNo);
+            var result = MessageBox.Show("Добавить " + FileName, "Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             
             if (result  ==  DialogResult.Yes)
             {
@@ -209,32 +294,14 @@ namespace GedeminBasesManager
             }
         }
 
-        /*
-        delegate void SetTextCallback(string text);
-        private void SetValue(string text)
-        {
-            // InvokeRequired required compares the thread ID of the
-            // calling thread to the thread ID of the creating thread.
-            // If these threads are different, it returns true.
-            if (tb.InvokeRequired())
-            {
-                SetTextCallback d = new SetTextCallback(SetValue);
-                Invoke(d, new object[] { text });
-            }
-            else
-            {
-                tb.AddText(text);
-            }
-        }
-        */
-
-        private void btnPassword_Click(object sender, EventArgs e)
+        private void BtnPassword_Click(object sender, EventArgs e)
         {
             // Set the ServerType to 1 for connect to the embedded server
             ResetPassword();
+            GenNewDBID();
         }
 
-        private void btnDeleteBK_Click(object sender, EventArgs e)
+        private void BtnDeleteBK_Click(object sender, EventArgs e)
         {
             DeleteBackup();
         }
@@ -246,40 +313,18 @@ namespace GedeminBasesManager
 
         private void BtnSQLCommand_Click(object sender, EventArgs e)
         {
-            FbConnectionStringBuilder fb_con = new FbConnectionStringBuilder();
-            fb_con.Charset = "WIN1251"; //используемая кодировка
-            fb_con.UserID = "SYSDBA"; //логин
-            fb_con.Password = "masterkey"; //пароль
-            fb_con.Database = restoreDestBox.Text;
-            fb_con.Dialect = 3;
-
-            FbConnection myConnection = new FbConnection(fb_con.ToString());
-            myConnection.Open();
-
-            FbTransaction myTransaction = myConnection.BeginTransaction();
-
-            String SQLCommand = "UPDATE GD_USER SET IBPASSWORD = 'masterkey' WHERE IBNAME = 'SYSDBA'";
-            if (tbLogOut.Text.Length > 0) SQLCommand = tbLogOut.Text;
-
-            FbCommand myCommand = new FbCommand();
-            myCommand.CommandText = SQLCommand;
-
-            myCommand.Connection = myConnection;
-            myCommand.Transaction = myTransaction;
-            myCommand.ExecuteNonQuery();
-            myTransaction.Commit();
-            myCommand.Dispose();
-            myConnection.Close();
-
-            MessageBox.Show("SQL запрос выполнен!");
+            ResetDBUser();            
+            // MessageBox.Show("SQL запрос выполнен!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void btnOpenDB_Click(object sender, EventArgs e)
+        private void BtnOpenDB_Click(object sender, EventArgs e)
         {
             Process p = new Process();
-            ProcessStartInfo pi = new ProcessStartInfo();
-            pi.UseShellExecute = true;
-            pi.FileName = restoreDestBox.Text;
+            ProcessStartInfo pi = new ProcessStartInfo
+            {
+                UseShellExecute = true,
+                FileName = restoreDestBox.Text
+            };
             p.StartInfo = pi;
 
             try
@@ -288,40 +333,8 @@ namespace GedeminBasesManager
             }
             catch (Exception Ex)
             {
-                //MessageBox.Show(Ex.Message);
+                MessageBox.Show(Ex.Message);
             }
-
         }
     }
-
-    /*
-    public class TextBoxTraceListener : TraceListener
-    {
-        private TextBox _target;
-        private StringSendDelegate _invokeWrite;
-        
-        public TextBoxTraceListener(TextBox target)
-        {
-            _target = target;
-            _invokeWrite = new StringSendDelegate(SendString);
-        }
-
-        public override void Write(string message)
-        {
-            _target.Invoke(_invokeWrite, new object[] { message });
-        }
-
-        public override void WriteLine(string message)
-        {
-            _target.Invoke(_invokeWrite, new object[]
-                { message + Environment.NewLine });
-        }
-        
-        private delegate void StringSendDelegate(string message);
-        private void SendString(string message)
-        {
-            _target.AppendText(message + "\r");
-        }
-    }   
-    */
 }
