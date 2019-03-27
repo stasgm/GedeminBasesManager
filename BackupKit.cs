@@ -20,7 +20,11 @@ namespace FirebirdBackupKit
 
         public string Password { get; set; }
 
-        public BackupKit(string username, string password)
+        public string Server{ get; set; }
+
+        public int Port { get; set; }
+
+        public BackupKit(string username, string password, string server, int port)
         {
 
             if (string.IsNullOrEmpty(username))
@@ -29,9 +33,14 @@ namespace FirebirdBackupKit
             if (string.IsNullOrEmpty(password))
                 throw new ArgumentNullException("password");
 
+            if (string.IsNullOrEmpty(server)) server = "localhost";
+
+            if (port == 0) Port = 3050;
+
             Username = username;
             Password = password;
-
+            Server = server;
+            Port = port;
         }
 
         public void Backup(string source, string dest)
@@ -239,6 +248,8 @@ namespace FirebirdBackupKit
                 UserID = Username,
                 Password = Password,
                 Database = database,
+                DataSource = Server,
+                Port = Port
             };
 
             return cs.ToString();

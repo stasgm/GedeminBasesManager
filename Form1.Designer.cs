@@ -146,7 +146,7 @@
             this.cbServerType.Name = "cbServerType";
             this.cbServerType.Size = new System.Drawing.Size(75, 21);
             this.cbServerType.TabIndex = 13;
-            this.cbServerType.SelectedIndexChanged += new System.EventHandler(this.cbServerType_SelectedIndexChanged);
+            this.cbServerType.SelectedIndexChanged += new System.EventHandler(this.CbServerType_SelectedIndexChanged);
             // 
             // numPort
             // 
@@ -184,7 +184,7 @@
             this.btnRemove.TabIndex = 6;
             this.btnRemove.Text = "Remove";
             this.btnRemove.UseVisualStyleBackColor = true;
-            this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
+            this.btnRemove.Click += new System.EventHandler(this.BtnRemove_Click);
             // 
             // btnAssociate
             // 
@@ -195,7 +195,7 @@
             this.btnAssociate.TabIndex = 5;
             this.btnAssociate.Text = "Associate";
             this.btnAssociate.UseVisualStyleBackColor = true;
-            this.btnAssociate.Click += new System.EventHandler(this.btnAssociate_Click);
+            this.btnAssociate.Click += new System.EventHandler(this.BtnAssociate_Click);
             // 
             // btnSelectGedemin
             // 
@@ -205,7 +205,7 @@
             this.btnSelectGedemin.TabIndex = 2;
             this.btnSelectGedemin.Text = "...";
             this.btnSelectGedemin.UseVisualStyleBackColor = true;
-            this.btnSelectGedemin.Click += new System.EventHandler(this.btnSelectGedemin_Click);
+            this.btnSelectGedemin.Click += new System.EventHandler(this.BtnSelectGedemin_Click);
             // 
             // label1
             // 
@@ -233,7 +233,7 @@
             this.btnClose.TabIndex = 1;
             this.btnClose.Text = "Close";
             this.btnClose.UseVisualStyleBackColor = true;
-            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
+            this.btnClose.Click += new System.EventHandler(this.BtnClose_Click);
             // 
             // fbBk
             // 
@@ -283,8 +283,8 @@
             this.Name = "frmSettings";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Settings";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmSettings_FormClosing);
-            this.Load += new System.EventHandler(this.frmSettings_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmSettings_FormClosing);
+            this.Load += new System.EventHandler(this.FrmSettings_Load);
             this.gbFdb.ResumeLayout(false);
             this.gbFdb.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).EndInit();

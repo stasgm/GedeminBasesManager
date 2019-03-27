@@ -54,6 +54,11 @@
             this.BtnSQLCommand = new System.Windows.Forms.Button();
             this.BtnClearLog = new System.Windows.Forms.Button();
             this.btnOpenDB = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.numPort = new System.Windows.Forms.NumericUpDown();
+            this.label2 = new System.Windows.Forms.Label();
+            this.tbServer = new System.Windows.Forms.TextBox();
+            ((System.ComponentModel.ISupportInitialize)(this.numPort)).BeginInit();
             this.SuspendLayout();
             // 
             // label3
@@ -71,7 +76,7 @@
             this.passwordBox.Location = new System.Drawing.Point(95, 66);
             this.passwordBox.Name = "passwordBox";
             this.passwordBox.PasswordChar = '*';
-            this.passwordBox.Size = new System.Drawing.Size(114, 20);
+            this.passwordBox.Size = new System.Drawing.Size(100, 20);
             this.passwordBox.TabIndex = 5;
             this.passwordBox.Text = "masterkey";
             // 
@@ -79,7 +84,7 @@
             // 
             this.usernameBox.Location = new System.Drawing.Point(95, 40);
             this.usernameBox.Name = "usernameBox";
-            this.usernameBox.Size = new System.Drawing.Size(114, 20);
+            this.usernameBox.Size = new System.Drawing.Size(100, 20);
             this.usernameBox.TabIndex = 4;
             this.usernameBox.Text = "SYSDBA";
             // 
@@ -296,12 +301,53 @@
             this.btnOpenDB.UseVisualStyleBackColor = true;
             this.btnOpenDB.Click += new System.EventHandler(this.BtnOpenDB_Click);
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(201, 40);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(41, 13);
+            this.label4.TabIndex = 52;
+            this.label4.Text = "Server:";
+            // 
+            // numPort
+            // 
+            this.numPort.Location = new System.Drawing.Point(248, 66);
+            this.numPort.Maximum = new decimal(new int[] {
+            4000,
+            0,
+            0,
+            0});
+            this.numPort.Name = "numPort";
+            this.numPort.Size = new System.Drawing.Size(57, 20);
+            this.numPort.TabIndex = 54;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(201, 66);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(26, 13);
+            this.label2.TabIndex = 55;
+            this.label2.Text = "Port";
+            // 
+            // tbServer
+            // 
+            this.tbServer.Location = new System.Drawing.Point(248, 40);
+            this.tbServer.Name = "tbServer";
+            this.tbServer.Size = new System.Drawing.Size(100, 20);
+            this.tbServer.TabIndex = 53;
+            // 
             // frmBackup
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(830, 341);
+            this.Controls.Add(this.numPort);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.tbServer);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.btnOpenDB);
             this.Controls.Add(this.BtnClearLog);
             this.Controls.Add(this.BtnSQLCommand);
@@ -332,8 +378,10 @@
             this.Name = "frmBackup";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Restore backup";
+            this.Load += new System.EventHandler(this.frmBackup_Load);
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.FrmBackup_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.FrmBackup_DragEnter);
+            ((System.ComponentModel.ISupportInitialize)(this.numPort)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -366,5 +414,9 @@
         private System.Windows.Forms.Button BtnSQLCommand;
         private System.Windows.Forms.Button BtnClearLog;
         private System.Windows.Forms.Button btnOpenDB;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.NumericUpDown numPort;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox tbServer;
     }
 }

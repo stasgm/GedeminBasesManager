@@ -35,6 +35,8 @@ namespace GedeminBasesManager
                 UserID = "SYSDBA", //логин
                 Password = "masterkey", //пароль
                 Database = restoreDestBox.Text,
+                Port = Decimal.ToInt16(numPort.Value),
+                DataSource = tbServer.Text,
                 Dialect = 3
             };
 
@@ -74,6 +76,8 @@ namespace GedeminBasesManager
                 UserID = "SYSDBA", //логин
                 Password = "masterkey", //пароль
                 Database = restoreDestBox.Text,
+                Port = Decimal.ToInt16(numPort.Value),
+                DataSource = tbServer.Text,
                 Dialect = 3
             };
 
@@ -103,7 +107,7 @@ namespace GedeminBasesManager
             // Close connection
             myConnection.Close();
 
-            tbLogOut.AppendText(Environment.NewLine + "Пароль SYSDBA был сброшен на значение по умолчанию" + Environment.NewLine);
+            tbLogOut.AppendText(Environment.NewLine + "Пароль SYSDBA был установлен на значение по умолчанию" + Environment.NewLine);
         }
 
         public void ResetDBUser()
@@ -114,6 +118,8 @@ namespace GedeminBasesManager
                 UserID = "SYSDBA", //логин
                 Password = "masterkey", //пароль
                 Database = restoreDestBox.Text,
+                Port = Decimal.ToInt16(numPort.Value),
+                DataSource = tbServer.Text,
                 Dialect = 3
             };
 
@@ -133,7 +139,7 @@ namespace GedeminBasesManager
             myCommand.Dispose();
             myConnection.Close();
 
-            tbLogOut.AppendText(Environment.NewLine + "Установлен пользователь DB SYSDBA и пароль сброшен на значение по умолчанию" + Environment.NewLine);
+            tbLogOut.AppendText(Environment.NewLine + "Установлен пользователь DB SYSDBA и пароль установлен на значение по умолчанию" + Environment.NewLine);
         }
 
         public frmBackup()
@@ -213,7 +219,7 @@ namespace GedeminBasesManager
             isProcess = true;
             try
             {
-                var backupKit = new BackupKit(usernameBox.Text, passwordBox.Text);
+                var backupKit = new BackupKit(usernameBox.Text, passwordBox.Text, tbServer.Text, Decimal.ToInt16(numPort.Value));
                 backupKit.Restore(restoreSrcBox.Text, restoreDestBox.Text, tbLogOut);
             }
             catch (ArgumentException ex)
@@ -226,12 +232,11 @@ namespace GedeminBasesManager
             }
 
 
-            // ResetDBUser();
+            ResetDBUser();
 
             if (cbIsResetPassword.Checked) ResetPassword();
             if (cbIsDeleteBK.Checked) DeleteBackup();
 
-            GenNewDBID();
             GenNewDBID();
 
             DialogResult dialogResult = MessageBox.Show("Закончен процесс восстановления базы данных!\nПодключиться к базе данных?" , "Внимание!", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -335,6 +340,18 @@ namespace GedeminBasesManager
             {
                 MessageBox.Show(Ex.Message);
             }
+        }
+
+        private void frmBackup_Load(object sender, EventArgs e)
+        {
+            tbServer.Text = Properties.Settings.Default.Server;
+            numPort.Value = Properties.Settings.Default.Port;
+            if (numPort.Value == 0)
+            {
+                numPort.Value = 3050;
+            }
+            usernameBox.Text = Properties.Settings.Default.Username;
+            passwordBox.Text = Properties.Settings.Default.Password;
         }
     }
 }

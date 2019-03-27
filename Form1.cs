@@ -20,12 +20,12 @@ namespace GedeminBasesManager
             cbServerType.SelectedIndex = 0;
         }
 
-        private void btnClose_Click(object sender, EventArgs e)
+        private void BtnClose_Click(object sender, EventArgs e)
         {
             Close();
         }
 
-        private void cbServerType_SelectedIndexChanged(object sender, EventArgs e)
+        private void CbServerType_SelectedIndexChanged(object sender, EventArgs e)
         {
             bool isDefaultSrv = false;
 
@@ -43,7 +43,7 @@ namespace GedeminBasesManager
             numPort.Enabled = isDefaultSrv;
         }
 
-        private void btnSelectGedemin_Click(object sender, EventArgs e)
+        private void BtnSelectGedemin_Click(object sender, EventArgs e)
         {
             OpenFileDialog oflDatabase = new OpenFileDialog();
             oflDatabase.Filter = "|gedemin.exe"; ;
@@ -53,7 +53,7 @@ namespace GedeminBasesManager
             }
         }
 
-        private void frmSettings_Load(object sender, EventArgs e)
+        private void FrmSettings_Load(object sender, EventArgs e)
         {
             cbServerType.SelectedIndex = Properties.Settings.Default.ServerType;
             tbServer.Text = Properties.Settings.Default.Server;
@@ -69,7 +69,7 @@ namespace GedeminBasesManager
 
         }
 
-        private void frmSettings_FormClosing(object sender, FormClosingEventArgs e)
+        private void FrmSettings_FormClosing(object sender, FormClosingEventArgs e)
         {
             Properties.Settings.Default.ServerType = cbServerType.SelectedIndex;
             Properties.Settings.Default.Server = tbServer.Text;
@@ -81,7 +81,7 @@ namespace GedeminBasesManager
             Properties.Settings.Default.Save();
         }
 
-        private void btnAssociate_Click(object sender, EventArgs e)
+        private void BtnAssociate_Click(object sender, EventArgs e)
         {
             string regtext = "";
             string gedeminDir = System.IO.Path.GetDirectoryName(tbGedeminPath.Text) + "\\";
@@ -126,7 +126,7 @@ namespace GedeminBasesManager
         }
 
 
-        private void btnRemove_Click(object sender, EventArgs e)
+        private void BtnRemove_Click(object sender, EventArgs e)
         {
             if (FileAssociation.IsAssociated(".fdb"))
             {
