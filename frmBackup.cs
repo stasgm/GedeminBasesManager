@@ -350,8 +350,8 @@ namespace GedeminBasesManager
             {
                 numPort.Value = 3050;
             }
-            usernameBox.Text = Properties.Settings.Default.Username;
-            passwordBox.Text = Properties.Settings.Default.Password;
+            usernameBox.Text = "SYSDBA";
+            passwordBox.Text = "masterke";
         }
     }
 }
